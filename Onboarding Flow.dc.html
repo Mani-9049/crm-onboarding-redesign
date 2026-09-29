@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,300..600,0..1,0&display=block" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Geist',system-ui,sans-serif;color:#18181b;-webkit-font-smoothing:antialiased;background:#fafaf9}
+*{box-sizing:border-box}
+a{color:#18181b}a:hover{color:#52525b}
+button,input,textarea{font-family:inherit}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes shimmer{0%{background-position:-200px 0}100%{background-position:200px 0}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column;background:#fafaf9;">
+  <header style="padding:28px clamp(20px,3.6vw,60px) 0;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span aria-hidden="true" style="width:30px;height:30px;border-radius:9px;background:#18181b;color:#fff;display:grid;place-items:center;font-family:'Material Symbols Rounded';font-size:19px;">all_inclusive</span>
+      <span style="font-size:18px;font-weight:600;letter-spacing:-.02em;">Zoho CRM</span>
+    </div>
+    <sc-if value="{{ hasChoice }}" hint-placeholder-val="{{ false }}">
+      <ol aria-label="Setup progress" style="list-style:none;margin:0;padding:0;display:flex;align-items:center;gap:6px;">
+        <sc-for list="{{ steps }}" as="st" hint-placeholder-count="3">
+          <li style="display:flex;align-items:center;gap:6px;">
+            <span style="display:flex;align-items:center;gap:6px;height:28px;padding:0 10px 0 6px;border-radius:999px;background:{{ st.bg }};color:{{ st.color }};font-size:12px;font-weight:500;transition:background .3s, color .3s;">
+              <span aria-hidden="true" style="width:16px;height:16px;border-radius:50%;background:{{ st.dotBg }};color:{{ st.dotColor }};display:grid;place-items:center;font-size:10px;font-weight:700;font-family:{{ st.dotFont }};">{{ st.mark }}</span>{{ st.label }}
+            </span>
+            <span aria-hidden="true" style="width:14px;height:1px;background:#d4d4d8;display:{{ st.sep }};"></span>
+          </li>
+        </sc-for>
+      </ol>
+    </sc-if>
+  </header>
+
+  <main style="flex:1;width:100%;max-width:1015px;margin:0 auto;padding:44px clamp(20px,3vw,40px) 140px;display:flex;flex-direction:column;gap:20px;">
+
+    <sc-if value="{{ noChoice }}" hint-placeholder-val="{{ true }}">
+      <section style="animation:rise .5s cubic-bezier(.2,.7,.2,1) both;">
+        <h1 style="margin:0 0 10px;font-size:clamp(30px,3.6vw,44px);font-weight:600;letter-spacing:-.035em;line-height:1.05;">How would you like to <span style="font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;font-size:1.12em;">start?</span></h1>
+        <p style="margin:0 0 32px;font-size:15px;color:#71717a;text-wrap:pretty;">Choose a starting point — you can always reshape your CRM with Zia after you're in.</p>
+        <div role="radiogroup" aria-label="Starting point" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px;">
+          <sc-for list="{{ choices }}" as="c" hint-placeholder-count="3">
+            <button type="button" role="radio" aria-checked="false" onClick="{{ c.pick }}" style="position:relative;text-align:left;display:flex;flex-direction:column;padding:8px;border-radius:20px;border:1px solid #e4e4e7;background:#fff;box-shadow:0 1px 2px rgba(24,24,27,.04);cursor:pointer;transition:border-color .2s, box-shadow .25s, transform .25s cubic-bezier(.2,.7,.2,1);" style-hover="transform:translateY(-3px);border-color:#a1a1aa;box-shadow:0 1px 2px rgba(24,24,27,.05),0 20px 40px -24px rgba(24,24,27,.35);" style-active="transform:scale(.99);" style-focus="outline:2px solid #18181b;outline-offset:3px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 44px 0 12px;">
+                <span aria-hidden="true" style="width:44px;height:44px;border-radius:12px;background:{{ c.heroBg }};display:grid;place-items:center;color:#fff;font-family:'Material Symbols Rounded';font-size:22px;font-variation-settings:'FILL' 1;">{{ c.icon }}</span>
+                <span style="display:{{ c.badgeShow }};align-items:center;gap:4px;padding:4px 9px;border-radius:999px;background:linear-gradient(110deg,#7c5cff,#e25aa8 60%,#ff9a62);color:#fff;font-size:11px;font-weight:600;"><span aria-hidden="true" style="font-family:'Material Symbols Rounded';font-size:13px;font-variation-settings:'FILL' 1;">auto_awesome</span>Built by Zia AI</span>
+                <span style="display:{{ c.tagShow }};padding:4px 9px;border-radius:999px;background:#f4f4f5;color:#3f3f46;font-size:11px;font-weight:500;">{{ c.tag }}</span>
+              </div>
+              <div style="padding:28px 12px 12px;">
+                <span style="display:block;font-size:17px;font-weight:600;letter-spacing:-.02em;margin-bottom:6px;">{{ c.title }}</span>
+                <span style="display:block;font-size:13.5px;line-height:1.55;color:#52525b;text-wrap:pretty;">{{ c.desc }}</span>
+              </div>
+              <span aria-hidden="true" style="position:absolute;top:18px;right:18px;width:20px;height:20px;border-radius:50%;border:1.5px solid #d4d4d8;background:#fff;"></span>
+            </button>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ hasChoice }}" hint-placeholder-val="{{ false }}">
+      <section aria-label="Starting point" style="animation:rise .45s cubic-bezier(.2,.7,.2,1) both;display:flex;flex-direction:column;gap:16px;padding:20px;border-radius:20px;border:1px solid #e4e4e7;background:#fff;box-shadow:0 1px 2px rgba(24,24,27,.04);">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+          <div style="display:flex;align-items:flex-start;gap:14px;min-width:0;flex:1 1 360px;">
+            <span aria-hidden="true" style="flex:none;width:44px;height:44px;border-radius:12px;background:{{ selHeroBg }};color:#fff;display:grid;place-items:center;font-family:'Material Symbols Rounded';font-size:22px;font-variation-settings:'FILL' 1;">{{ selIcon }}</span>
+            <div style="min-width:0;">
+              <p style="margin:0 0 4px;font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#71717a;">Step 01 · How would you like to start?</p>
+              <p style="margin:0 0 4px;font-size:18px;font-weight:600;letter-spacing:-.02em;">{{ selTitle }}</p>
+              <p style="margin:0;font-size:13.5px;line-height:1.55;color:#52525b;text-wrap:pretty;max-width:560px;">{{ selDesc }}</p>
+            </div>
+          </div>
+          <span style="display:flex;align-items:center;gap:4px;height:26px;padding:0 10px;border-radius:999px;background:#f4f4f5;font-size:12px;font-weight:500;color:#3f3f46;"><span aria-hidden="true" style="font-family:'Material Symbols Rounded';font-size:14px;">check_circle</span>Selected</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-top:14px;border-top:1px solid #f0f0f1;">
+          <span style="font-size:12px;color:#71717a;">Switch to</span>
+          <div role="radiogroup" aria-label="Starting point" style="display:flex;flex-wrap:wrap;gap:4px;padding:4px;border-radius:12px;background:#f4f4f5;">
+            <sc-for list="{{ choices }}" as="c" hint-placeholder-count="3">
+              <button type="button" role="radio" aria-checked="{{ c.sel }}" onClick="{{ c.pick }}" style="display:flex;align-items:center;gap:7px;height:34px;padding:0 12px 0 9px;border-radius:9px;border:0;background:{{ c.segBg }};box-shadow:{{ c.segShadow }};color:{{ c.segColor }};font-size:13px;font-weight:500;cursor:pointer;transition:background .2s, color .2s, box-shadow .2s;" style-hover="color:#18181b;" style-focus="outline:2px solid #18181b;outline-offset:1px;">
+                <span aria-hidden="true" style="font-family:'Material Symbols Rounded';font-size:17px;font-variation-settings:{{ c.segFill }};">{{ c.icon }}</span>{{ c.title }}
+              </button>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isDefault }}" hint-placeholder-val="{{ false }}">
+      <section ref="{{ refDefault }}" style="animation:rise .5s .05s cubic-bezier(.2,.7,.2,1) both;padding:28px;border-radius:20px;border:1px solid #e4e4e7;background:#fff;">
+        <p style="margin:0 0 8px;font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#71717a;">Step 02 · Review</p>
+        <h2 style="margin:0 0 6px;font-size:26px;font-weight:600;letter-spacing:-.03em;">Your standard CRM is set up</h2>
+        <p style="margin:0 0 22px;font-size:14px;color:#52525b;">{{ baseCount }} standard modules are included. You can add or remove modules any time after sign in.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <sc-for list="{{ baseMods }}" as="m" hint-placeholder-count="11">
+            <span style="display:flex;align-items:center;gap:8px;height:38px;padding:0 12px 0 10px;border-radius:10px;border:1px solid #ececee;background:#fafafa;font-size:13.5px;font-weight:500;"><span aria-hidden="true" style="font-family:'Material Symbols Rounded';font-size:18px;color:#52525b;">{{ m.icon }}</span>{{ m.name }}</span>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ showIndGrid }}" hint-placeholder-val="{{ false }}">
+      <section ref="{{ refInd }}" style="animation:rise .5s .05s cubic-bezier(.2,.7,.2,1) both;">
+        <p style="margin:12px 0 8px;font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#71717a;">Step 02 · Industry</p>
+        <h2 style="margin:0 0 6px;font-size:clamp(24px,2.8vw,32px);font-weight:600;letter-spacing:-.03em;">What industry are you <span style="font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;font-size:1.12em;">in?</span></h2>
+        <p style="margin:0 0 22px;font-size:14px;color:#71717a;">I'll tailor your modules and setup to match.</p>
+        <div role="radiogroup" aria-label="Industry" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,180px),1fr));gap:10px;">
+          <sc-for list="{{ industries }}" as="it" hint-placeholder-count="12">
+            <button type="button" role="radio" aria-checked="{{ it.sel }}" onClick="{{ it.pick }}" style="display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;border:1px solid {{ it.border }};background:#fff;box-shadow:{{ it.shadow }};cursor:pointer;text-align:left;transition:border-color .2s, box-shadow .25s, transform .2s;" style-hover="transform:translateY(-2px);border-color:#a1a1aa;" style-active="transform:scale(.98);" style-focus="outline:2px solid #18181b;outline-offset:2px;">
+              <span aria-hidden="true" style="flex:none;width:38px;height:38px;border-radius:10px;background:{{ it.iconBg }};color:{{ it.iconColor }};display:grid;place-items:center;font-family:'Material Symbols Rounded';font-size:20px;transition:background .2s, color .2s;">{{ it.icon }}</span>
+              <span style="font-size:14px;font-weight:500;">{{ it.name }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ showIndSummary }}" hint-placeholder-val="{{ false }}">
+      <section style="animation:rise .4s cubic-bezier(.2,.7,.2,1) both;display:flex;align-items:center;gap:12px;padding:12px 12px 12px 16px;border-radius:16px;border:1px solid #e4e4e7;background:#fff;">
+        <span aria-hidden="true" style="width:36px;height:36px;border-radius:10px;background:#18181b;color:#fff;display:grid;place-items:center;font-family:'Material Symbols Rounded';font-size:19px;">{{ indIcon }}</span>
+        <div style="flex:1;min-width:0;">
+          <p style="margin:0;font-size:12px;color:#71717a;">Step 02 · Industry</p>
+          <p style="margin:0;font-size:15px;font-weight:600;">{{ indName }}</p>
+        </div>
+        <button type="button" onClick="{{ changeInd }}" style="height:34px;padding:0 12px;border-radius:9px;border:1px solid #e4e4e7;background:#fff;font-size:13px;font-weight:500;color:#18181b;cursor:pointer;" style-hover="background:#f4f4f5;" style-focus="outline:2px solid #18181b;outline-offset:2px;">Change</button>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ showBrief }}" hint-placeholder-val="{{ false }}">
+      <section ref="{{ refBrief }}" style="animation:rise .5s .05s cubic-bezier(.2,.7,.2,1) both;padding:24px;border-radius:20px;border:1px solid #e4e4e7;background:#fff;">
+        <p style="margin:0 0 8px;font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#71717a;">Step 02 · Brief</p>
+        <h2 style="margin:0 0 6px;font-size:24px;font-weight:600;letter-spacing:-.03em;">Tell Zia about your business</h2>
+        <p style="margin:0 0 20px;font-size:14px;color:#71717a;">Upload a BRD, describe your use cases, or both.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:12px;">
+          <label onDragOver="{{ onDragOver }}" onDragLeave="{{ onDragLeave }}" onDrop="{{ onDrop }}" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:150px;padding:18px;border-radius:14px;border:1.5px dashed {{ dropBorder }};background:{{ dropBg }};cursor:pointer;text-align:center;transition:background .2s, border-color .2s;" style-hover="border-color:#71717a;">
+            <input type="file" accept=".pdf,.doc,.docx,.txt" onChange="{{ onFile }}" style="position:absolute;width:1px;height:1px;opacity:0;">
+            <span aria-hidden="true" style="width:40px;height:40px;border-radius:12px;background:#fff;border:1px solid #e4e4e7;display:grid;place-items:center;font-family:'Material Symbols Rounded';font-size:21px;color:#3f3f46;">{{ fileIcon }}</span>
+            <span style="font-size:14px;font-weight:600;">{{ fileLabel }}</span>
+            <span style="font-size:12px;color:#71717a;">{{ fileHint }}</span>
+          </label>
+          <div style="display:flex;flex-direction:column;border-radius:14px;border:1px solid {{ descBorder }};background:#fff;transition:border-color .2s;">
+            <textarea aria-label="Describe your use cases" value="{{ desc }}" onChange="{{ onDesc }}" onFocus="{{ descFocus }}" onBlur="{{ descBlur }}" placeholder="e.g. We run a solar installation business. Track site surveys, installation projects, vendor quotes and service tickets." style="flex:1;min-height:110px;resize:vertical;border:0;outline:none;padding:14px;font-size:14px;line-height:1.5;color:#18181b;background:transparent;border-radius:14px;"></textarea>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;padding:0 12px 12px;">
+              <sc-for list="{{ prompts }}" as="p" hint-placeholder-count="3">
+                <button type="button" onClick="{{ p.use }}" style="height:28px;padding:0 10px;border-radius:999px;border:1px solid #e4e4e7;background:#fafafa;font-size:12px;color:#3f3f46;cursor:pointer;" style-hover="background:#f4f4f5;border-color:#d4d4d8;" style-focus="outline:2px solid #18181b;outline-offset:1px;">{{ p.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+          <span style="font-size:12px;color:{{ briefHintColor }};">{{ briefHint }}</span>
+          <button type="button" onClick="{{ generate }}" disabled="{{ genDisabled }}" style="height:40px;padding:0 16px;display:flex;align-items:center;gap:8px;border-radius:11px;border:0;background:{{ genBg }};color:#fff;font-size:14px;font-weight:600;cursor:pointer;transition:background .2s, transform .15s;" style-active="transform:scale(.97);" style-focus="outline:2px solid #5b45d6;outline-offset:3px;"><span aria-hidden="true" style="font-family:'Material Symbols Rounded';font-size:18px;font-variation-settings:'FILL' 1;animation:{{ genSpin }};">{{ genIcon }}</span>{{ genLabel }}</button>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ genLoading }}" hint-placeholder-val="{{ false }}">
+      <section aria-busy="true" aria-label="Zia is analysing" style="animation:rise .4s cubic-bezier(.2,.7,.2,1) both;padding:24px;border-radius:20px;border:1px solid #e4e4e7;background:#fff;">
+        <p style="margin:0 0 16px;font-size:14px;color:#52525b;display:flex;align-items:center;gap:8px;"><span aria-hidden="true" style="width:22px;height:22px;border-radius:7px;background:linear-gradient(135deg,#7c5cff,#e25aa8 60%,#ff9a62);display:grid;place-items:center;color:#fff;font-family:'Material Symbols Rounded';font-size:14px;font-variation-settings:'FILL' 1;">auto_awesome</span>Zia is reading your brief and matching Zoho CRM features…</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;">
+          <sc-for list="{{ skeletons }}" as="w" hint-placeholder-count="8">
+            <span style="height:44px;width:{{ w.w }};border-radius:12px;background:linear-gradient(90deg,#f4f4f5 0,#ebebed 50%,#f4f4f5 100%);background-size:400px 100%;animation:shimmer 1.2s linear infinite;"></span>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ showModules }}" hint-placeholder-val="{{ false }}">
+      <section ref="{{ refMods }}" style="animation:rise .5s .05s cubic-bezier(.2,.7,.2,1) both;">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:12px 0 20px;">
+          <div>
+            <p style="margin:0 0 8px;font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#71717a;">Step 03 · Modules</p>
+            <h2 style="margin:0 0 6px;font-size:clamp(24px,2.8vw,32px);font-weight:600;letter-spacing:-.03em;">{{ modTitle }} <span style="font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;font-size:1.12em;">{{ modTitleEm }}</span></h2>
+            <p style="margin:0;font-size:14px;color:#71717a;">{{ modSub }}</p>
+          </div>
+          <span aria-live="polite" style="font-size:13px;font-weight:500;color:#3f3f46;padding:6px 10px;border-radius:999px;background:#f4f4f5;">{{ modCount }}</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;">
+          <sc-for list="{{ mods }}" as="m" hint-placeholder-count="14">
+            <button type="button" aria-pressed="{{ m.sel }}" onClick="{{ m.toggle }}" style="display:flex;align-items:center;gap:10px;height:44px;padding:0 12px;border-radius:12px;border:1px solid {{ m.border }};background:{{ m.bg }};box-shadow:{{ m.shadow }};cursor:pointer;transition:border-color .2s, background .2s, box-shadow .2s, transform .2s cubic-bezier(.2,.7,.2,1);" style-hover="transform:translateY(-1px);border-color:#a1a1aa;" style-active="transform:scale(.97);" style-focus="outline:2px solid #18181b;outline-offset:2px;">
+              <span aria-hidden="true" style="font-family:'Material Symbols Rounded';font-size:19px;color:{{ m.color }};transition:color .2s;">{{ m.icon }}</span>
+              <span style="font-size:14px;font-weight:500;color:{{ m.color }};white-space:nowrap;transition:color .2s;">{{ m.name }}</span>
+              <span aria-hidden="true" style="display:{{ m.ziaShow }};width:16px;height:16px;border-radius:5px;background:linear-gradient(135deg,#7c5cff,#e25aa8 60%,#ff9a62);color:#fff;place-items:center;font-family:'Material Symbols Rounded';font-size:11px;font-variation-settings:'FILL' 1;">auto_awesome</span>
+              <span aria-hidden="true" style="width:18px;height:18px;border-radius:6px;border:1.5px solid {{ m.checkBorder }};background:{{ m.checkBg }};display:grid;place-items:center;transition:background .2s, border-color .2s;"><span style="font-family:'Material Symbols Rounded';font-size:13px;color:#fff;font-variation-settings:'wght' 700;transform:{{ m.checkScale }};opacity:{{ m.checkOpacity }};transition:transform .3s cubic-bezier(.3,1.6,.5,1), opacity .15s;">check</span></span>
+            </button>
+          </sc-for>
+          <sc-if value="{{ notCreating }}" hint-placeholder-val="{{ true }}">
+            <button type="button" onClick="{{ startCreate }}" style="display:flex;align-items:center;gap:8px;height:44px;padding:0 14px 0 10px;border-radius:12px;border:1px dashed #a1a1aa;background:transparent;color:#18181b;font-size:14px;font-weight:500;cursor:pointer;transition:background .2s, border-color .2s;" style-hover="background:#f4f4f5;border-color:#18181b;" style-active="transform:scale(.97);" style-focus="outline:2px solid #18181b;outline-offset:2px;"><span aria-hidden="true" style="font-family:'Material Symbols Rounded';font-size:20px;">add</span>Create Module</button>
+          </sc-if>
+          <sc-if value="{{ creating }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;align-items:center;gap:4px;height:44px;padding:0 5px 0 14px;border-radius:12px;border:1px solid {{ inputBorder }};background:#fff;box-shadow:0 0 0 3px rgba(24,24,27,.06);">
+              <input ref="{{ inputRef }}" aria-label="Module name" value="{{ newName }}" onChange="{{ onName }}" onKeyDown="{{ onKey }}" placeholder="Module name" maxLength="40" style="width:150px;border:0;outline:none;font-size:14px;background:transparent;color:#18181b;">
+              <button type="button" onClick="{{ addCustom }}" aria-label="Add module" style="width:32px;height:32px;border-radius:8px;border:0;background:#18181b;color:#fff;display:grid;place-items:center;cursor:pointer;font-family:'Material Symbols Rounded';font-size:18px;" style-focus="outline:2px solid #18181b;outline-offset:2px;">check</button>
+              <button type="button" onClick="{{ cancelCreate }}" aria-label="Cancel" style="width:32px;height:32px;border-radius:8px;border:0;background:transparent;color:#71717a;display:grid;place-items:center;cursor:pointer;font-family:'Material Symbols Rounded';font-size:18px;" style-hover="background:#f4f4f5;" style-focus="outline:2px solid #18181b;outline-offset:2px;">close</button>
+            </div>
+          </sc-if>
+        </div>
+        <sc-if value="{{ hasErr }}" hint-placeholder-val="{{ false }}"><p role="alert" style="margin:12px 0 0;font-size:12px;font-weight:500;color:#b42318;">{{ newErr }}</p></sc-if>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ showZia }}" hint-placeholder-val="{{ false }}">
+      <aside aria-label="Zia AI assistant" style="animation:rise .5s .12s cubic-bezier(.2,.7,.2,1) both;display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:16px;background:linear-gradient(110deg,#f1ecff 0%,#fbeef7 55%,#fff2e8 100%);border:1px solid #efe6f7;">
+        <span aria-hidden="true" style="flex:none;width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#7c5cff,#e25aa8 60%,#ff9a62);display:grid;place-items:center;font-family:'Material Symbols Rounded';font-size:21px;font-variation-settings:'FILL' 1;color:#fff;box-shadow:0 6px 16px -6px rgba(200,80,170,.55);">auto_awesome</span>
+        <p style="margin:0;font-size:14px;line-height:1.55;color:#3f3a4d;text-wrap:pretty;">Once you're inside, Our AI assistant <strong style="font-weight:600;color:#18181b;">Zia</strong> is always with you to create modules, add fields, configure automations, or get help with anything in your CRM.</p>
+      </aside>
+    </sc-if>
+  </main>
+
+  <sc-if value="{{ hasChoice }}" hint-placeholder-val="{{ false }}">
+    <footer style="position:fixed;left:0;right:0;bottom:0;z-index:5;background:rgba(250,250,249,.85);backdrop-filter:blur(12px);border-top:1px solid #ececee;animation:rise .4s cubic-bezier(.2,.7,.2,1) both;">
+      <div style="max-width:1015px;margin:0 auto;padding:14px clamp(20px,3vw,40px);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+        <p style="margin:0;font-size:14px;color:#71717a;">A CRM that fits your industry. Ready from day one.</p>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <button type="button" onClick="{{ back }}" style="height:42px;padding:0 16px;display:flex;align-items:center;gap:2px;border:1px solid #e4e4e7;background:#fff;font-size:14px;font-weight:500;color:#18181b;cursor:pointer;border-radius:12px;" style-hover="background:#f4f4f5;border-color:#d4d4d8;" style-focus="outline:2px solid #18181b;outline-offset:2px;"><span aria-hidden="true" style="font-family:'Material Symbols Rounded';font-size:18px;">chevron_left</span>Back</button>
+          <button type="button" onClick="{{ primary }}" disabled="{{ primaryDisabled }}" style="height:42px;padding:0 20px;display:flex;align-items:center;gap:8px;border-radius:12px;border:0;background:{{ primaryBg }};color:#fff;font-size:14px;font-weight:600;cursor:{{ primaryCursor }};transition:transform .15s, background .2s, filter .15s;" style-hover="filter:brightness(1.08);" style-active="transform:scale(.97);" style-focus="outline:2px solid #5b45d6;outline-offset:3px;">{{ primaryLabel }}<span aria-hidden="true" style="font-family:'Material Symbols Rounded';font-size:18px;animation:{{ launchSpin }};">{{ primaryIcon }}</span></button>
+        </div>
+      </div>
+    </footer>
+  </sc-if>
+
+  <sc-if value="{{ launched }}" hint-placeholder-val="{{ false }}">
+    <div role="dialog" aria-modal="true" aria-label="CRM ready" style="position:fixed;inset:0;z-index:10;display:grid;place-items:center;padding:20px;background:rgba(250,250,249,.8);backdrop-filter:blur(8px);animation:rise .3s ease both;">
+      <div style="width:min(420px,100%);padding:32px;border-radius:22px;background:#fff;border:1px solid #e4e4e7;box-shadow:0 30px 60px -30px rgba(24,24,27,.4);text-align:center;">
+        <span aria-hidden="true" style="margin:0 auto 18px;width:56px;height:56px;border-radius:50%;background:#18181b;color:#fff;display:grid;place-items:center;font-family:'Material Symbols Rounded';font-size:30px;animation:pop .5s cubic-bezier(.3,1.6,.5,1) both;">check</span>
+        <h2 style="margin:0 0 8px;font-size:24px;font-weight:600;letter-spacing:-.03em;">Your CRM is ready</h2>
+        <p style="margin:0 0 22px;font-size:14px;color:#52525b;">{{ launchSummary }}</p>
+        <button type="button" onClick="{{ reset }}" style="height:42px;padding:0 18px;border-radius:12px;border:1px solid #e4e4e7;background:#fff;font-size:14px;font-weight:500;cursor:pointer;" style-hover="background:#f4f4f5;" style-focus="outline:2px solid #18181b;outline-offset:2px;">Start over</button>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const BASE = [['Lead','ads_click'],['Contact','account_circle'],['Accounts','domain'],['Deals','handshake'],['Task','task_alt'],['Meeting','event'],['Calls','call'],['Products','inventory_2'],['Quotes','request_quote'],['Sales Orders','list_alt'],['Invoices','receipt_long']];
+const INDUSTRIES = [
+  ['re','Real Estate','apartment',[['Properties','home_work'],['Site visits','pin_drop'],['Listings','sell']]],
+  ['health','Healthcare','health_and_safety',[['Patients','personal_injury'],['Appointments','calendar_month'],['Prescriptions','medication']]],
+  ['retail','Retail','storefront',[['Stores','store'],['Loyalty','loyalty']]],
+  ['mfg','Manufacturing','precision_manufacturing',[['Work orders','construction'],['Suppliers','factory']]],
+  ['edu','Education','school',[['Students','person'],['Courses','menu_book'],['Admissions','how_to_reg']]],
+  ['logistic','Logistic','conveyor_belt',[['Shipments','package_2'],['Warehouses','warehouse']]],
+  ['transport','Transport','local_shipping',[['Fleet','directions_car'],['Trips','route']]],
+  ['it','IT / Saas','cloud',[['Subscriptions','autorenew'],['Tickets','confirmation_number']]],
+  ['bank','Banking','account_balance',[['Bank accounts','account_balance_wallet'],['Loan products','savings'],['KYC documents','badge']]],
+  ['hosp','Hospitality / Travel','luggage',[['Bookings','book_online'],['Guests','groups']]],
+  ['fin','Finance / Insurance','shield',[['Policies','policy'],['Claims','assignment']]],
+];
+const ZIA = [['Projects','view_kanban'],['Site surveys','map'],['Vendors','storefront'],['Service tickets','confirmation_number'],['Contracts','contract']];
+const CHOICES = [
+  { id:'default', title:'Default CRM', icon:'dashboard', i1:'table_rows', i2:'bar_chart', tag:'Start immediately', heroBg:'#18181b', desc:'A complete CRM ready the moment you sign in. All standard modules already set up just add your data and go.' },
+  { id:'industry', title:'Industry CRM', icon:'near_me', i1:'school', i2:'account_balance', tag:'Recommended for most', heroBg:'#18181b', desc:'Modules and workflows built for your sector. Pick your industry, choose your modules, and confirm then follow a guided setup.' },
+  { id:'build', title:'Build your own', icon:'auto_awesome', i1:'description', i2:'extension', tag:'', heroBg:'linear-gradient(135deg,#7c5cff,#e25aa8 60%,#ff9a62)', desc:'Upload your BRD or describe your use cases. Zia suggests modules and the right Zoho CRM features, then walks you through configuration.' },
+];
+const toMods = (arr, zia) => arr.map(([name, icon]) => ({ id: name.toLowerCase().replace(/\W+/g, '-'), name, icon, zia: !!zia }));
+const INIT = { choice: null, industry: null, indOpen: true, file: null, drag: false, desc: '', descFocus: false, gen: 'idle', mods: [], selected: new Set(), creating: false, newName: '', newErr: '', launch: 'idle' };
+
+class Component extends DCLogic {
+  state = { ...INIT };
+  inputRef = React.createRef(); activeRef = React.createRef();
+  componentDidUpdate(_, p) {
+    const s = this.state;
+    if (s.creating && !p.creating) setTimeout(() => this.inputRef.current?.focus(), 20);
+    if (s.choice !== p.choice || s.industry !== p.industry || (s.gen === 'done' && p.gen !== 'done')) {
+      setTimeout(() => { const el = this.activeRef.current; if (el) window.scrollTo({ top: Math.max(0, el.getBoundingClientRect().top + window.scrollY - 110), behavior: 'smooth' }); }, 60);
+    }
+  }
+  componentWillUnmount() { clearTimeout(this.t1); clearTimeout(this.t2); }
+  setMods(mods) { this.setState({ mods, selected: new Set(mods.map(m => m.id)), creating: false, newErr: '' }); }
+  pickChoice(id) {
+    if (id === this.state.choice) return;
+    clearTimeout(this.t1);
+    this.setState({ ...INIT, choice: id }, () => { if (id === 'default') this.setMods(toMods(BASE)); });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  pickIndustry(id) {
+    const ind = INDUSTRIES.find(i => i[0] === id);
+    this.setState({ industry: id, indOpen: false });
+    this.setMods(toMods([...BASE, ...ind[3]]));
+  }
+  generate() {
+    this.setState({ gen: 'loading' });
+    this.t1 = setTimeout(() => { this.setState({ gen: 'done' }); this.setMods([...toMods(BASE.slice(0, 7)), ...toMods(ZIA, true)]); }, 1600);
+  }
+  toggle(id) { const n = new Set(this.state.selected); n.has(id) ? n.delete(id) : n.add(id); this.setState({ selected: n }); }
+  addCustom() {
+    const name = this.state.newName.trim();
+    if (!name) return this.setState({ newErr: 'Enter a module name.' });
+    if (this.state.mods.some(m => m.name.toLowerCase() === name.toLowerCase())) return this.setState({ newErr: 'A module with this name already exists.' });
+    const id = 'c-' + Date.now(), n = new Set(this.state.selected); n.add(id);
+    this.setState({ mods: [...this.state.mods, { id, name, icon: 'extension' }], selected: n, creating: false, newName: '', newErr: '' });
+  }
+  setFile(f) { if (f) this.setState({ file: f.name, drag: false }); }
+  back() {
+    const s = this.state;
+    if (s.choice === 'industry' && s.industry && !s.indOpen) return this.setState({ indOpen: true });
+    if (s.choice === 'build' && s.gen === 'done') return this.setState({ gen: 'idle' });
+    this.setState({ ...INIT });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  renderVals() {
+    const s = this.state, INK = '#18181b', c = s.choice;
+    const ind = INDUSTRIES.find(i => i[0] === s.industry);
+    const briefOk = !!s.file || s.desc.trim().length >= 12;
+    const modsReady = (c === 'industry' && s.industry && !s.indOpen) || (c === 'build' && s.gen === 'done');
+    const count = s.selected.size, selC = CHOICES.find(x => x.id === c);
+
+    let stepDefs = [], cur = 0;
+    if (c === 'default') { stepDefs = ['Start', 'Review', 'Launch']; cur = 1; }
+    if (c === 'industry') { stepDefs = ['Start', 'Industry', 'Modules', 'Launch']; cur = modsReady ? 2 : 1; }
+    if (c === 'build') { stepDefs = ['Start', 'Brief', 'Modules', 'Launch']; cur = modsReady ? 2 : 1; }
+    if (s.launch !== 'idle') cur = stepDefs.length - 1;
+    const steps = stepDefs.map((label, i) => {
+      const done = i < cur, now = i === cur;
+      return { label, bg: now ? '#fff' : 'transparent', color: done || now ? INK : '#a1a1aa',
+        dotBg: done ? INK : now ? '#5b45d6' : '#e4e4e7', dotColor: done || now ? '#fff' : '#71717a',
+        mark: done ? 'check' : String(i + 1), dotFont: done ? "'Material Symbols Rounded'" : 'inherit', sep: i < stepDefs.length - 1 ? 'block' : 'none' };
+    });
+
+    let primaryLabel = 'Launch CRM', primaryIcon = 'arrow_forward', primaryDisabled = false, primary = () => this.launch();
+    if (c === 'industry' && !modsReady) { primaryLabel = 'Next'; primaryDisabled = !s.industry; primary = () => this.pickIndustry(s.industry); }
+    if (c === 'build' && !modsReady) { primaryLabel = 'Generate with Zia'; primaryIcon = 'auto_awesome'; primaryDisabled = !briefOk || s.gen === 'loading'; primary = () => this.generate(); }
+    if (modsReady && count === 0) primaryDisabled = true;
+    if (s.launch === 'loading') { primaryLabel = 'Setting up…'; primaryIcon = 'progress_activity'; primaryDisabled = true; }
+
+    return {
+      noChoice: !c, hasChoice: !!c, steps,
+      selTitle: selC ? selC.title : '', selDesc: selC ? selC.desc : '', selIcon: selC ? selC.icon : '', selHeroBg: selC ? selC.heroBg : '#18181b',
+      choices: CHOICES.map(ch => { const on = ch.id === c; return { ...ch, sel: on, pick: () => this.pickChoice(ch.id),
+        badgeShow: ch.id === 'build' ? 'flex' : 'none', tagShow: ch.tag ? 'block' : 'none',
+        segBg: on ? '#fff' : 'transparent', segShadow: on ? '0 1px 2px rgba(24,24,27,.1), 0 1px 1px rgba(24,24,27,.05)' : 'none',
+        segColor: on ? INK : '#71717a', segFill: on ? "'FILL' 1" : "'FILL' 0" }; }),
+
+      isDefault: c === 'default', baseMods: toMods(BASE), baseCount: BASE.length,
+      refDefault: c === 'default' ? this.activeRef : null,
+
+      showIndGrid: c === 'industry' && s.indOpen, showIndSummary: c === 'industry' && !!s.industry && !s.indOpen,
+      refInd: c === 'industry' && s.indOpen ? this.activeRef : null,
+      industries: INDUSTRIES.map(([id, name, icon]) => { const on = s.industry === id; return { id, name, icon, sel: on, pick: () => this.pickIndustry(id),
+        border: on ? INK : '#e4e4e7', shadow: on ? '0 0 0 3px rgba(24,24,27,.08)' : '0 1px 2px rgba(24,24,27,.04)',
+        iconBg: on ? INK : '#f4f4f5', iconColor: on ? '#fff' : '#3f3f46' }; }),
+      indName: ind ? ind[1] : '', indIcon: ind ? ind[2] : '', changeInd: () => this.setState({ indOpen: true }),
+
+      showBrief: c === 'build' && s.gen === 'idle', genLoading: c === 'build' && s.gen === 'loading',
+      refBrief: c === 'build' && s.gen === 'idle' ? this.activeRef : null,
+      skeletons: [96, 120, 104, 88, 140, 110, 128, 100].map(w => ({ w: w + 'px' })),
+      dropBorder: s.drag ? INK : s.file ? '#71717a' : '#d4d4d8', dropBg: s.drag ? '#f4f4f5' : '#fafafa',
+      fileIcon: s.file ? 'description' : 'upload_file', fileLabel: s.file || 'Upload your BRD', fileHint: s.file ? 'Click to replace' : 'Drop a file or click · PDF, DOC, TXT',
+      onFile: e => this.setFile(e.target.files?.[0]),
+      onDragOver: e => { e.preventDefault(); if (!s.drag) this.setState({ drag: true }); },
+      onDragLeave: () => this.setState({ drag: false }),
+      onDrop: e => { e.preventDefault(); this.setFile(e.dataTransfer.files?.[0]); },
+      desc: s.desc, onDesc: e => this.setState({ desc: e.target.value }),
+      descFocus: () => this.setState({ descFocus: true }), descBlur: () => this.setState({ descFocus: false }),
+      descBorder: s.descFocus ? INK : '#e4e4e7',
+      prompts: ['Track projects & vendors', 'Manage service tickets', 'Handle contracts'].map(label => ({ label, use: () => this.setState({ desc: (s.desc ? s.desc.trim() + ' ' : '') + label + '.' }) })),
+      briefHint: briefOk ? 'Ready — Zia will suggest modules from your brief.' : 'Add a file or at least a sentence about your business.',
+      briefHintColor: briefOk ? '#3f3f46' : '#71717a',
+      generate: () => this.generate(), genDisabled: !briefOk, genBg: briefOk ? '#5b45d6' : '#c4c4cc',
+      genIcon: 'auto_awesome', genLabel: 'Generate with Zia', genSpin: 'none',
+
+      showModules: modsReady, refMods: modsReady ? this.activeRef : null,
+      modTitle: c === 'build' ? 'Suggested by' : 'CRM configured for', modTitleEm: c === 'build' ? 'Zia' : (ind ? ind[1] : ''),
+      modSub: c === 'build' ? 'Zia picked these from your brief. Tap any to deselect.' : 'All modules selected by default tap any to deselect.',
+      modCount: count + ' of ' + s.mods.length + ' selected',
+      mods: s.mods.map(m => { const on = s.selected.has(m.id); return { ...m, sel: on, toggle: () => this.toggle(m.id),
+        bg: on ? '#fff' : 'transparent', border: on ? '#e4e4e7' : '#ececee', shadow: on ? '0 1px 2px rgba(24,24,27,.05)' : 'none',
+        color: on ? INK : '#a1a1aa', ziaShow: m.zia ? 'grid' : 'none',
+        checkBg: on ? INK : 'transparent', checkBorder: on ? INK : '#d4d4d8', checkScale: on ? 'scale(1)' : 'scale(.4)', checkOpacity: on ? 1 : 0 }; }),
+      creating: s.creating, notCreating: !s.creating, newName: s.newName, newErr: s.newErr, hasErr: !!s.newErr,
+      inputBorder: s.newErr ? '#b42318' : INK, inputRef: this.inputRef,
+      startCreate: () => this.setState({ creating: true }),
+      cancelCreate: () => this.setState({ creating: false, newName: '', newErr: '' }),
+      onName: e => this.setState({ newName: e.target.value, newErr: '' }),
+      onKey: e => { if (e.key === 'Enter') this.addCustom(); if (e.key === 'Escape') this.setState({ creating: false, newName: '', newErr: '' }); },
+      addCustom: () => this.addCustom(),
+
+      showZia: c === 'default' || modsReady,
+      back: () => this.back(), primary, primaryLabel, primaryIcon, primaryDisabled,
+      primaryBg: primaryDisabled && s.launch === 'idle' ? '#c4c4cc' : '#5b45d6', primaryCursor: primaryDisabled ? 'not-allowed' : 'pointer',
+      launchSpin: s.launch === 'loading' ? 'spin 1s linear infinite' : 'none',
+      launched: s.launch === 'done', launchSummary: count + ' modules are set up' + (ind && c === 'industry' ? ' for ' + ind[1] : '') + '. Zia is ready when you are.',
+      reset: () => { this.setState({ ...INIT }); window.scrollTo({ top: 0 }); },
+    };
+  }
+  launch() { this.setState({ launch: 'loading' }); this.t2 = setTimeout(() => this.setState({ launch: 'done' }), 1400); }
+}
+</script>
+</body>
+</html>

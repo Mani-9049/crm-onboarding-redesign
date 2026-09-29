@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=block" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#1b2033;-webkit-font-smoothing:antialiased;background:#f5f6fb}
+*{box-sizing:border-box}
+a{color:#2f6fe4}a:hover{color:#1f55c0}
+button,input{font-family:inherit}
+@keyframes pop{0%{transform:scale(.5)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column;background:radial-gradient(700px 500px at 10% 20%, oklch(0.94 0.03 250 / .8), transparent 70%), radial-gradient(800px 500px at 80% 0%, oklch(0.95 0.03 320 / .6), transparent 70%), linear-gradient(#f5f6fb,#f5f6fb);">
+  <header style="padding:36px clamp(20px,3.6vw,60px) 0;display:flex;align-items:center;gap:10px;">
+    <span aria-hidden="true" style="font-family:'Material Symbols Rounded';font-size:34px;color:#2f6fe4;">all_inclusive</span>
+    <span style="font-size:24px;font-weight:600;letter-spacing:-.01em;">Zoho CRM</span>
+  </header>
+
+  <main style="flex:1;width:100%;max-width:1015px;margin:0 auto;padding:28px clamp(20px,3vw,40px) 0;">
+    <h1 style="margin:0 0 8px;font-size:clamp(22px,2.4vw,26px);font-weight:700;letter-spacing:-.015em;">CRM Configured for <span style="color:#2f6fe4;">{{ industry }}</span></h1>
+    <p style="margin:0 0 40px;font-size:15px;font-weight:500;color:#555c70;">All modules selected by default tap any to deselect.</p>
+
+    <section aria-label="Modules" style="background:rgba(255,255,255,.85);border:1px solid #e8eaf2;border-radius:16px;padding:22px;box-shadow:0 1px 2px rgba(20,30,70,.04),0 12px 40px -24px rgba(40,50,120,.2);">
+      <div style="display:flex;flex-wrap:wrap;gap:14px 16px;">
+        <sc-for list="{{ mods }}" as="m" hint-placeholder-count="14">
+          <button type="button" aria-pressed="{{ m.sel }}" onClick="{{ m.toggle }}" style="display:flex;align-items:center;gap:10px;height:44px;padding:0 10px 0 5px;border-radius:13px;border:1px solid {{ m.border }};background:{{ m.bg }};box-shadow:{{ m.shadow }};cursor:pointer;transition:border-color .2s, background .2s, box-shadow .2s, transform .15s;" style-hover="transform:translateY(-2px);" style-active="transform:scale(.96);" style-focus="outline:2px solid #2f6fe4;outline-offset:2px;">
+            <span aria-hidden="true" style="width:34px;height:34px;border-radius:9px;background:{{ m.iconBg }};color:{{ m.iconColor }};display:grid;place-items:center;font-family:'Material Symbols Rounded';font-size:19px;font-variation-settings:{{ m.iconFill }};transition:background .2s, color .2s;">{{ m.icon }}</span>
+            <span style="font-size:14px;font-weight:600;color:{{ m.nameColor }};white-space:nowrap;transition:color .2s;">{{ m.name }}</span>
+            <span aria-hidden="true" style="margin-left:6px;width:20px;height:20px;border-radius:50%;border:1.5px solid {{ m.checkBorder }};background:{{ m.checkBg }};display:grid;place-items:center;transition:background .2s, border-color .2s;">
+              <span style="font-family:'Material Symbols Rounded';font-size:14px;color:#fff;font-variation-settings:'wght' 700;transform:{{ m.checkScale }};opacity:{{ m.checkOpacity }};transition:transform .3s cubic-bezier(.3,1.6,.5,1), opacity .15s;">check</span>
+            </span>
+          </button>
+        </sc-for>
+        <sc-if value="{{ notCreating }}" hint-placeholder-val="{{ true }}">
+          <button type="button" onClick="{{ startCreate }}" style="display:flex;align-items:center;gap:8px;height:44px;padding:0 14px 0 8px;border-radius:13px;border:1.5px dashed #9db8f0;background:oklch(0.97 0.02 262);color:#2f6fe4;font-size:14px;font-weight:600;cursor:pointer;transition:background .2s, transform .15s;" style-hover="background:oklch(0.94 0.035 262);transform:translateY(-2px);" style-active="transform:scale(.96);" style-focus="outline:2px solid #2f6fe4;outline-offset:2px;">
+            <span aria-hidden="true" style="width:26px;height:26px;border-radius:8px;background:#2f6fe4;color:#fff;display:grid;place-items:center;font-family:'Material Symbols Rounded';font-size:18px;">add</span>Create Module
+          </button>
+        </sc-if>
+        <sc-if value="{{ creating }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:6px;height:44px;padding:0 5px 0 12px;border-radius:13px;border:1.5px solid {{ inputBorder }};background:#fff;">
+            <input ref="{{ inputRef }}" aria-label="Module name" value="{{ newName }}" onChange="{{ onName }}" onKeyDown="{{ onKey }}" placeholder="Module name" maxLength="40" style="width:150px;border:0;outline:none;font-size:14px;background:transparent;color:#1b2033;">
+            <button type="button" onClick="{{ addCustom }}" aria-label="Add module" style="width:32px;height:32px;border-radius:9px;border:0;background:#2f6fe4;color:#fff;display:grid;place-items:center;cursor:pointer;font-family:'Material Symbols Rounded';font-size:19px;" style-focus="outline:2px solid #2f6fe4;outline-offset:2px;">check</button>
+            <button type="button" onClick="{{ cancelCreate }}" aria-label="Cancel" style="width:32px;height:32px;border-radius:9px;border:0;background:#f0f2f7;color:#555c70;display:grid;place-items:center;cursor:pointer;font-family:'Material Symbols Rounded';font-size:19px;" style-focus="outline:2px solid #2f6fe4;outline-offset:2px;">close</button>
+          </div>
+        </sc-if>
+      </div>
+      <sc-if value="{{ hasErr }}" hint-placeholder-val="{{ false }}"><p role="alert" style="margin:10px 0 0;font-size:12px;font-weight:600;color:oklch(0.52 0.19 25);">{{ newErr }}</p></sc-if>
+    </section>
+
+    <div style="margin-top:30px;display:flex;align-items:center;gap:14px;padding:12px 20px 12px 18px;border-radius:12px;background:linear-gradient(90deg, oklch(0.55 0.2 285), oklch(0.6 0.19 295));color:#fff;">
+      <span aria-hidden="true" style="flex:none;font-family:'Material Symbols Rounded';font-size:28px;font-variation-settings:'FILL' 1;">auto_awesome</span>
+      <p style="margin:0;font-size:15px;line-height:1.4;">Once you're inside, Our AI assistant Zia is always with you to create modules, add fields, configure automations, or get help with anything in your CRM.</p>
+    </div>
+  </main>
+
+  <footer style="width:100%;max-width:1015px;margin:0 auto;padding:40px clamp(20px,3vw,40px) 48px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+    <p style="margin:0;font-size:16px;color:#555c70;">A CRM that fits your industry. Ready from day one.</p>
+    <div style="display:flex;align-items:center;gap:20px;">
+      <button type="button" onClick="{{ back }}" style="display:flex;align-items:center;gap:2px;border:0;background:none;font-size:16px;font-weight:600;color:#555c70;cursor:pointer;padding:6px;border-radius:8px;" style-hover="color:#1b2033;" style-focus="outline:2px solid #2f6fe4;outline-offset:2px;"><span aria-hidden="true" style="font-family:'Material Symbols Rounded';font-size:20px;">chevron_left</span>Back</button>
+      <button type="button" onClick="{{ launch }}" disabled="{{ noneSelected }}" style="display:flex;align-items:center;gap:8px;height:40px;padding:0 20px;border-radius:999px;border:0;background:{{ launchBg }};color:#fff;font-size:16px;font-weight:600;cursor:pointer;box-shadow:0 8px 20px -10px #2f6fe4;transition:transform .15s, background .2s;" style-hover="transform:translateY(-1px);" style-active="transform:scale(.97);" style-focus="outline:2px solid #2f6fe4;outline-offset:3px;"><span aria-hidden="true" style="font-family:'Material Symbols Rounded';font-size:19px;">rocket_launch</span>{{ launchLabel }}</button>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;industry&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Banking&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const MODULES = [
+  ['lead','Lead','ads_click'],['contact','Contact','account_circle'],['accounts','Accounts','domain'],['deals','Deals','handshake'],['task','Task','task_alt'],
+  ['meeting','Meeting','event'],['calls','Calls','call'],['products','Products','inventory_2'],['quotes','Quotes','request_quote'],
+  ['orders','Sales Orders','list_alt'],['invoices','Invoices','receipt_long'],['bank','Bank accounts','account_balance'],['loan','Loan products','savings'],
+  ['kyc','KYC documents','badge'],['kyc2','KYC documents','folder_shared'],
+].map(([id, name, icon]) => ({ id, name, icon }));
+
+class Component extends DCLogic {
+  state = { selected: new Set(MODULES.map(m => m.id)), custom: [], creating: false, newName: '', newErr: '', launching: false };
+  inputRef = React.createRef();
+  componentDidUpdate(_, p) { if (this.state.creating && !p.creating) setTimeout(() => this.inputRef.current?.focus(), 20); }
+  toggle(id) { const n = new Set(this.state.selected); n.has(id) ? n.delete(id) : n.add(id); this.setState({ selected: n }); }
+  addCustom() {
+    const name = this.state.newName.trim(), all = [...MODULES, ...this.state.custom];
+    if (!name) return this.setState({ newErr: 'Enter a module name.' });
+    if (all.some(m => m.name.toLowerCase() === name.toLowerCase())) return this.setState({ newErr: 'A module with this name already exists.' });
+    const id = 'c_' + Date.now(), n = new Set(this.state.selected); n.add(id);
+    this.setState({ custom: [...this.state.custom, { id, name, icon: 'extension' }], selected: n, creating: false, newName: '', newErr: '' });
+  }
+  renderVals() {
+    const s = this.state, B = '#2f6fe4';
+    const mods = [...MODULES, ...s.custom].map(m => {
+      const on = s.selected.has(m.id);
+      return { ...m, sel: on, toggle: () => this.toggle(m.id),
+        bg: on ? 'linear-gradient(180deg,#fff, oklch(0.975 0.015 262))' : '#f7f8fa',
+        border: on ? 'oklch(0.78 0.09 262)' : '#e3e6ed',
+        shadow: on ? '0 0 0 3px oklch(0.6 0.18 262 / .1), 0 6px 14px -8px oklch(0.55 0.2 262 / .45)' : 'none',
+        iconBg: on ? 'oklch(0.94 0.04 262)' : '#eceef2', iconColor: on ? B : '#8b91a1', iconFill: on ? "'FILL' 1" : "'FILL' 0",
+        nameColor: on ? '#1b2033' : '#6b7285',
+        checkBg: on ? B : '#fff', checkBorder: on ? B : '#c5cad6',
+        checkScale: on ? 'scale(1)' : 'scale(.4)', checkOpacity: on ? 1 : 0 };
+    });
+    return {
+      industry: this.props.industry ?? 'Banking', mods,
+      creating: s.creating, notCreating: !s.creating, newName: s.newName, newErr: s.newErr, hasErr: !!s.newErr,
+      inputBorder: s.newErr ? 'oklch(0.6 0.19 25)' : B, inputRef: this.inputRef,
+      startCreate: () => this.setState({ creating: true }),
+      cancelCreate: () => this.setState({ creating: false, newName: '', newErr: '' }),
+      onName: e => this.setState({ newName: e.target.value, newErr: '' }),
+      onKey: e => { if (e.key === 'Enter') this.addCustom(); if (e.key === 'Escape') this.setState({ creating: false, newName: '', newErr: '' }); },
+      addCustom: () => this.addCustom(),
+      noneSelected: s.selected.size === 0, launchBg: s.selected.size ? B : '#a9b3c7',
+      launchLabel: s.launching ? 'Launching…' : 'Launch CRM',
+      launch: () => this.setState({ launching: true }), back: () => {},
+    };
+  }
+}
+</script>
+</body>
+</html>
